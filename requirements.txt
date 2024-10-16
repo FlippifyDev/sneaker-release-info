@@ -1,0 +1,4 @@
+beautifulsoup4==4.12.3
+pymongo==4.6.1
+python-dotenv==1.0.1
+tls_client==0.2.2
