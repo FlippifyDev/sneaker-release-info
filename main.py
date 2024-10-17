@@ -52,7 +52,7 @@ def main():
     db_products = {prod["link"]: prod for prod in db_docs}
 
     products = []
-    for prod in requested_products:
+    for prod in requested_products[:1]:
         prod_data = {
             "ping_sent": False,
             "regions": [],
@@ -74,8 +74,6 @@ def main():
         # If the product already exist and send ping is False then there is no need to update the product
         if db_prod is not None and prod_data["send_ping"] is False:
             continue
-        
-
         
         # Fetch the name of the website where the product is going to be released
         prod_data["website"] = brands.get(prod["brands"][0])
@@ -113,13 +111,35 @@ def should_send_ping(old, new):
     return False
 
 
+# Function to extract the largest image URL from data-srcset
+def get_largest_image_url(source):
+    data_srcset = source['data-srcset']
+    # Split by comma to get individual images
+    images = data_srcset.split(',')
+    # Initialize variables to track the largest image
+    largest_image = None
+    largest_width = 0
+
+    for image in images:
+        # Split by whitespace to separate the URL and width
+        url, width = image.rsplit(' ', 1)
+        width = int(width[:-1])  # Remove the 'w' and convert to int
+
+        # Check if this image width is larger than the current largest
+        if width > largest_width:
+            largest_width = width
+            largest_image = url
+    
+    return largest_image
+
 
 def extract_image(image_html):
     soup = BeautifulSoup(image_html, "lxml")
-    elem = soup.find("img", {"class": "img-fluid lazyload"})
 
-    return elem["src"]
+    source_webp = soup.find('source', type='image/webp')
+    largest_webp_image = get_largest_image_url(source_webp)
 
+    return largest_webp_image
 
 
 def create_filter_dict(data, filter_name, key, value):
