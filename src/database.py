@@ -1,6 +1,5 @@
+from datetime import datetime, timezone, timedelta
 from dotenv import load_dotenv
-from datetime import datetime, timezone
-import urllib.parse
 from pymongo import UpdateOne
 
 import logging
@@ -40,6 +39,29 @@ class Database():
                 'collMod': results_col,
                 'changeStreamPreAndPostImages': {'enabled': True}
             })
+
+
+
+    def delete_old_releases(self):
+        """Delete documents where release_date is more than 4 days old."""
+        try:
+            # Get the current time in UTC
+            current_time = datetime.now(timezone.utc)
+            
+            # Calculate the cutoff time for 4 days old
+            cutoff_time = current_time - timedelta(days=4)
+            
+            # Query to find documents with release_date older than 4 days
+            query = {"release_date": {"$lt": cutoff_time}}
+            
+            # Perform the deletion operation
+            result = self.results_col.delete_many(query)
+            
+            # Log or return the result of the deletion
+            logger.info(f"Deleted {result.deleted_count} documents where release_date is older than 4 days.")
+
+        except Exception as e:
+            logger.error(f"An error occurred while deleting documents: {e}")            
 
 
 
