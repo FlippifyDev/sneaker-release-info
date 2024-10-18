@@ -16,7 +16,8 @@ def main():
         raise error
     
     scrapers = fetch_scrapers()
-    for scraper in scrapers:
+    for scraper, name in scrapers:
+        logger.info(f"Scraping {name}")
         scraper(db)
 
     db.delete_old_releases()

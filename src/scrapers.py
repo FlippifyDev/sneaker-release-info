@@ -5,8 +5,8 @@ import json
 
 
 scrapers = [
-    (sneaktorious_run, 180),
-    (size_run, 1)
+    (sneaktorious_run, 180, "Sneaktorious"),
+    (size_run, 1, "Size")
 ]
 
 
@@ -15,9 +15,9 @@ def fetch_scrapers():
 
     scrapers_to_run = []
 
-    for scraper_func, run_count in scrapers:
+    for scraper_func, run_count, name in scrapers:
         if current_run % run_count == 0:
-            scrapers_to_run.append(scraper_func)
+            scrapers_to_run.append((scraper_func, name))
 
     return scrapers_to_run
 
