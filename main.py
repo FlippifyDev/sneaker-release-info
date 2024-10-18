@@ -1,6 +1,6 @@
 from src.logger_setup import setup_logger
+from src.scrapers import fetch_scrapers
 from src.database import Database
-from src.scrapers import scrapers
 
 
 logger = setup_logger("SNEAKER_RELEASE_INFO", "bot")
@@ -14,7 +14,8 @@ def main():
     except Exception as error:
         logger.error(error)
         raise error
-
+    
+    scrapers = fetch_scrapers()
     for scraper in scrapers:
         scraper(db)
 
