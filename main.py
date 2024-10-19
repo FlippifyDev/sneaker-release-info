@@ -1,4 +1,4 @@
-from src.logger_setup import setup_logger
+from src.logger_setup import setup_logger, delete_previous_logs_on_start
 from src.scrapers import fetch_scrapers
 from src.database import Database
 
@@ -26,6 +26,7 @@ def main():
 
 if __name__ == "__main__":
     try:
+        delete_previous_logs_on_start("bot")
         main()
     except Exception as error:
         raise error
