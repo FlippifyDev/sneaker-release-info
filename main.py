@@ -10,6 +10,7 @@ logger = setup_logger("SNEAKER_RELEASE_INFO", "bot")
 def main():
     try:
         db = Database()
+        db.delete_old_releases()
         
     except Exception as error:
         logger.error(error)
@@ -19,8 +20,6 @@ def main():
     for scraper, name in scrapers:
         logger.info(f"Scraping {name}")
         scraper(db)
-
-    db.delete_old_releases()
 
 
 

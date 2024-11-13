@@ -6,7 +6,7 @@ import logging
 import pymongo
 import os
 
-logger = logging.getLogger("PING-MANAGER")
+logger = logging.getLogger("SNEAKER_RELEASE_INFO")
 
 load_dotenv()
 
@@ -57,8 +57,9 @@ class Database():
             # Perform the deletion operation
             result = self.results_col.delete_many(query)
             
-            # Log or return the result of the deletion
-            logger.info(f"Deleted {result.deleted_count} documents where release_date is older than 4 days.")
+            if result.deleted_count > 0:
+                # Log or return the result of the deletion
+                logger.info(f"Deleted {result.deleted_count} documents where release_date is older than 4 days.")
 
         except Exception as e:
             logger.error(f"An error occurred while deleting documents: {e}")            
